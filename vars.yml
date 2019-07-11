@@ -1,0 +1,59 @@
+---
+############################
+# Vagrant machine settings #
+############################
+box: 'centos/7'
+name: 'Centos 7'
+hostname: 'devbox'
+cpu: '2'
+ram: '2048'
+sync_fodler: 'C:/Workspace'
+################################
+# Vagrant provisining settings #
+################################
+ansible_folder: '/vagrant/dev-box/ansible/'
+ansible_install_mode: 'pip'
+ansible_version: '2.7.12'
+ansible_become: true
+ansible_playbook: 'playbook.yml'
+ansible_inventory_path: 'host.yml'
+ansible_config_file: 'ansible.cfg'
+ansible_limit: 'localhost'
+ansible_galaxy_role_file: 'requirements.yml'
+ansible_galaxy_roles_path: 'roles'
+ansible_verbose: false
+########################################
+# Ansible playbook and roles variables #
+########################################
+configure_system: true
+configure_env: true
+packages:
+  - bash-completion
+  - bash-completion-extras
+  - git
+  - nano
+  - sshpass
+tools:
+  - cookiecutter
+  - molecule
+  - ansible-lint
+  - docker-py
+  - pywinrm
+  - pywinrm[credssp]
+  - pywinrm[ntlm]
+environment_vars:
+  ANSIBLE_LIBRARY: ~/.ansible/plugins/modules
+  ANSIBLE_NOCOLOR: false
+  ANSIBLE_HOST_KEY_CHECKING: false
+  ANSIBLE_FORCE_COLOR: true
+  ANSIBLE_SSH_PIPELINING: true
+  ANSIBLE_LOAD_CALLBACK_PLUGINS: true
+  ANSIBLE_STDOUT_CALLBACK: debug
+  ANSIBLE_CALLBACK_WHITELIST: profile_tasks, timer
+  ANSIBLE_GATHERING: smart
+docker_installation: true
+docker_users:
+  - vagrant
+docker_daemon_opts: '-H fd:// -H unix:///var/run/docker.sock -H tcp://0.0.0.0:2376'
+docker_daemon_config:
+  storage-driver: overlay2
