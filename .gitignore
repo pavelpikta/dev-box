@@ -1,0 +1,8 @@
+/.vagrant
+roles/
+
+__pycache__
+*.pyc
+*.rst
+*.log
+*.retry
