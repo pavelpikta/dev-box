@@ -1,0 +1,80 @@
+---
+- name: Ansible provisioning
+  hosts: localhost
+  tasks:
+
+  - name: Load variables
+    include_vars: '../vars.yml'
+
+  - name: Configure system
+    block:
+      - name: Enable EPEL repository
+        yum:
+          name: 'https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm'
+          state: present
+        register: installed_packages
+        until: installed_packages is succeeded
+
+      - name: Upgrade all packages
+        yum:
+          name: '*'
+          state: latest
+        register: installed_packages
+        until: installed_packages is succeeded
+        tags:
+          - skip_ansible_lint
+
+      - name: Upgrade pip packages
+        pip:
+          name:
+            - 'pip'
+            - 'setuptools'
+          state: present
+          extra_args: --upgrade
+        register: installed_packages
+        until: installed_packages is succeeded
+
+      - name: Install packages
+        package:
+          name: '{{ packages }}'
+          state: present
+        register: installed_packages
+        until: installed_packages is succeeded
+
+      - name: Install tools
+        pip:
+          name: '{{ tools }}'
+          state: present
+        register: installed_packages
+        until: installed_packages is succeeded
+    become: true
+    when: configure_system | bool
+
+  - name: Configure environment variables
+    block:
+      - name: Touch env file
+        file:
+          path: /etc/environment
+          owner: root
+          group: root
+          state: touch
+          modification_time: preserve
+          access_time: preserve
+
+      - name: Configuring environment
+        lineinfile:
+          dest: /etc/environment
+          regexp: '^{{ item.key }}\ ?='
+          line: "{{ item.key }}='{{ item.value }}'"
+        loop: '{{ environment_vars | dict2items }}'
+    become: true
+    when: configure_env | bool
+
+  - name: Docker block
+    block:
+      - name: Docker install
+        include_role:
+            name: haxorof.docker_ce
+        become: true
+        when: docker_installation | bool
+
