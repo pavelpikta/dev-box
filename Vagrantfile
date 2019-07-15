@@ -18,6 +18,8 @@ Vagrant.configure("2") do |config|
   vb.name = machine['name']
   end
 
+  config.vm.provision "shell", type: "shell", run: "once", inline: "sudo yum -y install epel-release && sudo yum -y install python-pip"
+
   config.vm.provision "ansible_local" do |ansible|
     ansible.install_mode = machine['ansible_install_mode']
     ansible.version = machine['ansible_version']

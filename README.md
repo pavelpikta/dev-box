@@ -31,7 +31,7 @@ Read more about Vagrant Ansible provisioners:
 * [Shared Ansible Options](https://www.vagrantup.com/docs/provisioning/ansible_common.html)
 
 ```yaml
-ansible_folder: '/vagrant/vagrant/ansible/'
+ansible_folder: '/vagrant/dev-box/ansible/'
 ansible_install_mode: 'pip'
 ansible_version: '2.7.12'
 ansible_become: true
@@ -59,7 +59,7 @@ tools:
   - cookiecutter
   - molecule
   - ansible-lint
-  - docker-py
+  - docker
   - pywinrm
   - pywinrm[credssp]
   - pywinrm[ntlm]
