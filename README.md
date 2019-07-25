@@ -6,10 +6,11 @@ It's main use is to create on Windows machine Linux virtual machine to developin
 ## Setup Instructions
 
 1. Install [Virtualbox](https://www.virtualbox.org/) and [Vagrant](https://www.vagrantup.com/).
-2. Clone this repository and cd into it.
-3. Configure the necessary variables in [`vars.yml`](vars.yml)  
+2. Install `vagrant-vbguest` plugin. Run command `vagrant plugin install vagrant-vbguest`
+3. Clone this repository and cd into it.
+4. Configure the necessary variables in [`vars.yml`](vars.yml)  
 **Important**: The synchronization folder `sync_fodler` should contain a repository `dev-box`
-4. Run `vagrant up`
+5. Run `vagrant up`
 
 ## Variables
 
@@ -33,7 +34,7 @@ Read more about Vagrant Ansible provisioners:
 ```yaml
 ansible_folder: '/vagrant/dev-box/ansible/'
 ansible_install_mode: 'pip'
-ansible_version: '2.7.12'
+ansible_version: '2.8.2'
 ansible_become: true
 ansible_playbook: 'playbook.yml'
 ansible_inventory_path: 'host.yml'
@@ -55,14 +56,17 @@ packages:
   - git
   - nano
   - sshpass
+  - wget
 tools:
   - cookiecutter
   - molecule
   - ansible-lint
   - docker
+  - paramiko
   - pywinrm
   - pywinrm[credssp]
   - pywinrm[ntlm]
+  - virtualenv
 environment_vars:
   ANSIBLE_LIBRARY: ~/.ansible/plugins/modules
   ANSIBLE_NOCOLOR: false

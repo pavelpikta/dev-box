@@ -59,5 +59,4 @@
       - name: Docker install
         include_role:
             name: haxorof.docker_ce
-        become: true
         when: docker_installation | bool
